@@ -1,6 +1,6 @@
 import axios from 'axios'
 import history from '../history'
-
+import {getGoal} from './userGoals'
 /**
  * ACTION TYPES
  */
@@ -24,6 +24,9 @@ const removeUser = () => ({type: REMOVE_USER})
 export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
+    dispatch(getGoal(res.data.id))
+    // console.log('res.data', res.data)
+
     dispatch(getUser(res.data || defaultUser))
   } catch (err) {
     console.error(err)
