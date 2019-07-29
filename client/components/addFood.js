@@ -73,9 +73,9 @@ class AddFood extends React.Component {
     var name = this.props.food.name.split(',')
 
     var newName = ''
-    name.forEach((str, index) => {
-      if (index !== name.length - 1) {
-        newName += str
+    name.forEach((name, index) => {
+      if (!name.includes('UPC:')) {
+        newName += name
       }
     })
 

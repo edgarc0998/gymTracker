@@ -39,8 +39,11 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
         defaults: {name, email}
       })
         .then(([user]) => {
-          UserGoals.create({
-            userId: user.id
+          UserGoals.findOrCreate({
+            where: {
+              userId: user.id
+            }
+            // userId: user.id
           })
           done(null, user)
         })

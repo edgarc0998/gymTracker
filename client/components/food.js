@@ -159,8 +159,9 @@ class Food extends React.Component {
     if (this.props.foods[0] !== undefined) {
       foods = foods.filter(food => {
         if (
+          food.userId === this.props.user.id &&
           food.createdAt.slice(8, 10) ===
-          this.state.startDate.getDate().toString()
+            this.state.startDate.getDate().toString()
         ) {
           return food
         }
@@ -210,6 +211,7 @@ class Food extends React.Component {
           <FoodTime time="lunch" foods={foods} />
           <FoodTime time="dinner" foods={foods} />
           <FoodTime time="snacks" foods={foods} />
+
           {/* <Totals
             totals={totals}
             handleCHange={this.handleChange}
@@ -229,7 +231,8 @@ document.head.appendChild(styleLink)
 
 const mapStateToProps = state => {
   return {
-    foods: state.food
+    foods: state.food,
+    user: state.user
   }
 }
 

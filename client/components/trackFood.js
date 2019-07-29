@@ -13,7 +13,10 @@ const TrackFoodCard = props => {
   if (props.foods[0] !== undefined) {
     const date = new Date()
     foods = foods.filter(food => {
-      if (food.createdAt.slice(8, 10) === date.getDate().toString()) {
+      if (
+        food.userId === props.user.id &&
+        food.createdAt.slice(8, 10) === date.getDate().toString()
+      ) {
         return food
       }
     })
@@ -59,7 +62,8 @@ const TrackFoodCard = props => {
 const mapStateToProps = state => {
   return {
     foods: state.food,
-    goal: state.goal
+    goal: state.goal,
+    user: state.user
   }
 }
 
