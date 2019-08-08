@@ -1,6 +1,7 @@
 body {
   font-family: sans-serif;
   background-color: white;
+  /* height: 100%; */
 }
 
 #bg {
@@ -133,7 +134,10 @@ label {
 }
 
 .userHome {
-  margin-top: 150px;
+  /* margin-top: 150px; */
+  padding: 125px;
+  height: 100%;
+  overflow: hidden;
 }
 
 .navHeader {
@@ -265,6 +269,7 @@ form div {
 #addFoodButton {
   background-color: limegreen;
   color: white;
+  max-width: 150px;
 }
 
 .addFoodButton {
@@ -305,9 +310,6 @@ form div {
 .foodSearchItem {
   display: flex;
   flex-direction: row;
-  /* align-items: center;
-  align-content: center;
-  justify-content: center */
 }
 #addItem {
   margin-left: 5px;
@@ -325,11 +327,16 @@ form div {
   border-top: 0px !important;
 }
 
-/* .ui.table tr td {
-  border-left: 0px !important;
-  border-right: 0px !important;
+#foodSearchItem {
+  display: flex;
+  flex-direction: column;
+}
 
-} */
+#foodSearchItemInfo {
+  padding: 5px;
+  font-size: 14px;
+  margin-left: 1rem;
+}
 
 .react-datepicker-popper[data-placement^='bottom'] .react-datepicker__triangle,
 .react-datepicker-popper[data-placement^='top'] .react-datepicker__triangle,

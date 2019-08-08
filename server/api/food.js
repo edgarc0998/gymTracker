@@ -4,7 +4,11 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    const foods = await Food.findAll()
+    const foods = await Food.findAll({
+      where: {
+        userId: req.user.id
+      }
+    })
     res.json(foods)
   } catch (err) {
     next(err)

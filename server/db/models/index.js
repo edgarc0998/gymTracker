@@ -1,6 +1,7 @@
 const User = require('./user')
 const Food = require('./food')
 const UserGoals = require('./userGoals')
+const DailyCheckIn = require('./dailyCheckIn')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -20,9 +21,12 @@ UserGoals.belongsTo(User)
 User.hasOne(UserGoals)
 Food.belongsTo(User)
 User.hasOne(Food)
+DailyCheckIn.belongsTo(User)
+User.hasMany(DailyCheckIn)
 
 module.exports = {
   User,
   Food,
-  UserGoals
+  UserGoals,
+  DailyCheckIn
 }

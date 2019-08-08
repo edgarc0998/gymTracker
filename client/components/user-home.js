@@ -11,6 +11,7 @@ import {getGoal} from '../store/userGoals'
 import {Button, Card, Image} from 'semantic-ui-react'
 import Circle from 'react-circle'
 import {FoodSearch} from './foodSearch'
+import Progress from './progress'
 
 /**
  * COMPONENT
@@ -31,7 +32,6 @@ export class UserHome extends React.Component {
 
     return (
       <div className="userHome">
-        {/* <h3>Welcome, {email}</h3> */}
         <div className="userComponents">
           <Card.Group>
             <Route exact path="/home" component={TrackFood} />
@@ -42,8 +42,8 @@ export class UserHome extends React.Component {
 
         <Route exact path="/home/food" component={Food} />
         <Route path="/home/food/add" component={FoodSearch} />
-
         <Route exact path="/home/profile" component={Profile} />
+        <Route exact path="/home/progress" component={Progress} />
       </div>
     )
   }

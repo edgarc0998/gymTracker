@@ -155,14 +155,15 @@ class Food extends React.Component {
     //get foods of the current date
     const allFoods = this.props.foods
     var foods = allFoods
-
     if (this.props.foods[0] !== undefined) {
       foods = foods.filter(food => {
-        if (
-          food.userId === this.props.user.id &&
-          food.createdAt.slice(8, 10) ===
-            this.state.startDate.getDate().toString()
-        ) {
+        var date = food.createdAt.slice(8, 10)
+
+        if (date < 10) {
+          date = food.createdAt.slice(9, 10)
+        }
+
+        if (date === this.state.startDate.getDate().toString()) {
           return food
         }
       })
@@ -211,12 +212,13 @@ class Food extends React.Component {
           <FoodTime time="lunch" foods={foods} />
           <FoodTime time="dinner" foods={foods} />
           <FoodTime time="snacks" foods={foods} />
+          {/* <FoodTime time="all" foods={foods} /> */}
 
-          {/* <Totals
+          <Totals
             totals={totals}
             handleCHange={this.handleChange}
             value={this.state.calsBurned}
-          /> */}
+          />
         </div>
       </React.Fragment>
     )

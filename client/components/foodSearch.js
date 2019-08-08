@@ -21,13 +21,7 @@ export class FoodSearch extends React.Component {
   }
 
   async handleChange(event) {
-    console.log('here')
     event.preventDefault()
-    console.log(event.target.value)
-
-    //get value of input
-    // const newChar = event.target.value
-    // var newSearch = this.state.searchName + newChar
 
     this.setState({
       searchName: event.target.value
@@ -53,22 +47,6 @@ export class FoodSearch extends React.Component {
 
   async handleSubmit(evt) {
     evt.preventDefault()
-    //   const word = evt.target.search.value
-
-    //   const res = await axios.get(
-    //     `https://api.nal.usda.gov/ndb/search/?format=json&q=${word}&sort=n&max=50&offset=0&api_key=VfLLSxw4Odcu042mZ1dySCS2hLJULj5zkhtx1lLy`
-    //   )
-
-    //   if (res.data.list) {
-    //     this.setState({
-    //       currentSearch: res.data.list.item,
-    //       showError: false
-    //     })
-    //   } else {
-    //     this.setState({
-    //       showError: true
-    //     })
-    //   }
   }
 
   render() {

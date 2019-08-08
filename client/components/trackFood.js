@@ -11,12 +11,15 @@ const TrackFoodCard = props => {
   var foods = allFoods
 
   if (props.foods[0] !== undefined) {
-    const date = new Date()
+    const dateNow = new Date()
     foods = foods.filter(food => {
-      if (
-        food.userId === props.user.id &&
-        food.createdAt.slice(8, 10) === date.getDate().toString()
-      ) {
+      var date = food.createdAt.slice(8, 10)
+
+      if (date < 10) {
+        date = food.createdAt.slice(9, 10)
+      }
+
+      if (date === dateNow.getDate().toString()) {
         return food
       }
     })

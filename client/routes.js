@@ -6,6 +6,7 @@ import {Login, Signup, UserHome, Navbar} from './components'
 import {me} from './store'
 import {getFood} from './store/food'
 import {getGoal} from './store/userGoals'
+import {getAllCheckIns} from './store/checkIn'
 
 /**
  * COMPONENT
@@ -59,6 +60,7 @@ const mapDispatch = dispatch => {
     loadInitialData() {
       dispatch(me())
       dispatch(getFood())
+      dispatch(getAllCheckIns())
     }
   }
 }
