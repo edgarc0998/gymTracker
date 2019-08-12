@@ -6,6 +6,7 @@ import {postFood} from '../store/food'
 import axios from 'axios'
 import {Button, Header, Image, Modal, Icon} from 'semantic-ui-react'
 import AddFood from './addFood'
+import {getFood} from '../store/food'
 
 export class FoodSearch extends React.Component {
   constructor() {
@@ -18,6 +19,10 @@ export class FoodSearch extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
+  }
+
+  async componentDidMount() {
+    await this.props.getFood()
   }
 
   async handleChange(event) {
@@ -84,3 +89,17 @@ export class FoodSearch extends React.Component {
     )
   }
 }
+
+const mapState = state => {
+  return {
+    foods: state.food
+  }
+}
+
+const mapDispatch = dispatch => {
+  return {
+    getFood: () => dispatch(getFood())
+  }
+}
+
+export default connect(mapState, mapDispatch)(FoodSearch)

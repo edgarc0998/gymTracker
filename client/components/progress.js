@@ -1,47 +1,110 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import * as V from 'victory'
-import {VictoryLine, VictoryChart, VictoryAxis, VictoryTheme} from 'victory'
+import {
+  VictoryLine,
+  VictoryChart,
+  VictoryAxis,
+  VictoryTheme,
+  VictoryLabel
+} from 'victory'
+import {Progress} from 'semantic-ui-react'
+import {getGoal} from '../store/userGoals'
+import {getFood} from '../store/food'
 
 class MainProgress extends React.Component {
   constructor() {
     super()
+
+    this.state = {
+      calsMonth: [],
+      weightMonth: [],
+      burnedMonth: []
+    }
+
+    this.getWeeksLeft = this.getWeeksLeft.bind(this)
+    this.getCaloriesMonth = this.getCaloriesMonth.bind(this)
+  }
+
+  async componentDidMount() {
+    await this.props.getFood()
+    this.getCaloriesMonth()
+  }
+
+  getCaloriesMonth() {
+    var arr = []
+
+    var day = 1
+    var sum = 0
+
+    for (let k = 0; k < this.props.food.length; k++) {
+      var currDay = this.props.food[k].createdAt
+      currDay = new Date(currDay)
+      currDay = currDay.getDate()
+      if (currDay === day) {
+        sum += this.props.food[k].calories
+      } else {
+        arr.push(sum)
+        sum = this.props.food[k].calories
+        day++
+      }
+    }
+
+    arr.push(sum)
+
+    var newArr = []
+
+    for (let i = 1; i < 31; i++) {
+      newArr.push({x: i, y: arr[i - 1]})
+    }
+
+    var weight = []
+    var burned = []
+
+    if (this.props.checkIns.checkIns) {
+      for (let i = 1; i < 31; i++) {
+        weight.push({x: i, y: this.props.checkIns.checkIns[i - 1].weight})
+        burned.push({
+          x: i,
+          y: this.props.checkIns.checkIns[i - 1].caloriesBurned
+        })
+      }
+    }
+
+    this.setState({
+      calsMonth: newArr,
+      weightMonth: weight,
+      burnedMonth: burned
+    })
+  }
+
+  getWeeksLeft() {
+    var cals
+    if (this.props.goal.goal === 'Gain 1 lb a week') {
+      cals = 500
+    } else if (this.props.goal.goal === 'Gain 0.5 lbs a week') {
+      cals = 250
+    } else if (this.props.goal.goal === 'Maintain current weight') {
+      cals = 0
+    } else if (this.props.goal.goal === 'Lose 0.5 lbs a week') {
+      cals = 250
+    } else if (this.props.goal.goal === 'Lose 1 lb a week') {
+      cals = 500
+    } else if (this.props.goal.goal === 'Lose 1.5 lbs a week') {
+      cals = 750
+    } else if (this.props.goal.goal === 'Lose 2 lbs a week') {
+      cals = 1000
+    }
+
+    var lbsPerWeek = cals * 7 / 3500
+
+    var weeksLeft =
+      (this.props.goal.goalWeight - this.props.goal.currentWeight) / lbsPerWeek
+
+    return Math.abs(weeksLeft)
   }
 
   render() {
-    const data = [
-      {x: 1, y: 180},
-      {x: 2, y: 180.5},
-      {x: 3, y: 181},
-      {x: 4, y: 179},
-      {x: 5, y: 180},
-      {x: 6, y: 180.5},
-      {x: 7, y: 181},
-      {x: 8, y: 182},
-      {x: 9, y: 180},
-      {x: 10, y: 180.5},
-      {x: 11, y: 181},
-      {x: 12, y: 180},
-      {x: 13, y: 181},
-      {x: 14, y: 182},
-      {x: 15, y: 183},
-      {x: 16, y: 183},
-      {x: 17, y: 182},
-      {x: 18, y: 181.7},
-      {x: 19, y: 181.9},
-      {x: 20, y: 182},
-      {x: 21, y: 182},
-      {x: 22, y: 182.5},
-      {x: 23, y: 182.5},
-      {x: 24, y: 182.8},
-      {x: 25, y: 182.9},
-      {x: 26, y: 183},
-      {x: 27, y: 183.4},
-      {x: 28, y: 183.6},
-      {x: 29, y: 183.7},
-      {x: 30, y: 184}
-    ]
-
     const tickValues = []
     for (let i = 1; i <= 30; i++) {
       tickValues.push(i)
@@ -52,73 +115,244 @@ class MainProgress extends React.Component {
       tickFormat.push(`${i}`)
     }
 
+    var per = Math.floor(
+      (this.props.goal.currentWeight - this.props.goal.startingWeight) /
+        (this.props.goal.goalWeight - this.props.goal.startingWeight) *
+        100
+    )
+
+    var weeksLeft = this.getWeeksLeft()
+
+    var date = this.props.goal.updatedAt
+    var newDate = new Date(date)
+    newDate.setDate(newDate.getDate() + weeksLeft * 7)
+
+    var endDate
+
+    var year = newDate.getFullYear().toString()
+    var month = (newDate.getMonth() + 1).toString()
+    var day = newDate.getDate().toString()
+
+    if (month < 10) {
+      month = '0' + month
+    }
+    if (day < 10) {
+      day = '0' + day
+    }
+
+    endDate = month + '-' + day + '-' + year
+
+    var startDate = new Date(this.props.goal.updatedAt)
+
+    var year = startDate.getFullYear().toString()
+    var month = (startDate.getMonth() + 1).toString()
+    var day = startDate.getDate().toString()
+
+    if (month < 10) {
+      month = '0' + month
+    }
+    if (day < 10) {
+      day = '0' + day
+    }
+
+    startDate = month + '-' + day + '-' + year
+
     return (
-      <div>
-        <VictoryChart responsive={false} height={150} width={200}>
-          <VictoryAxis
-            // tickValues specifies both the number of ticks and where
-            // they are placed on the axis
-            tickValues={tickValues}
-            tickFormat={tickFormat}
-            style={tickStyle}
-          />
-          <VictoryAxis
-            dependentAxis
-            // tickFormat specifies how ticks should be displayed
-            domain={[180, 188]}
-            style={tickStyle}
-          />
-          <VictoryLine
-            style={{
-              data: {stroke: '#c43a31'},
-              parent: {border: '1px solid #ccc'}
-            }}
-            data={data}
-          />
-        </VictoryChart>
+      <div id="progressDiv">
+        <div id="charts">
+          <div id="weightVsDay">
+            <h3>Weight vs day (Month) </h3>
+            <VictoryChart
+              style={{parent: {maxWidth: '100%', maxHeight: '100%'}}}
+            >
+              <VictoryAxis
+                tickValues={tickValues}
+                tickFormat={tickFormat}
+                style={{
+                  tickLabels: {
+                    fontSize: '10px',
+                    fontFamily: 'gothicApple',
+                    fillOpacity: 1,
+                    marginTop: '4px',
+                    padding: 3,
+                    angle: 90
+                  },
+                  axisLabel: {
+                    fontsize: 13
+                  }
+                }}
+              />
+              <VictoryAxis
+                dependentAxis
+                domain={[180, 184]}
+                style={{
+                  tickLabels: {
+                    fontSize: '15px',
+                    fontFamily: 'gothicApple',
+                    fillOpacity: 1,
+                    margin: 1,
+                    padding: 2,
+                    angle: 0
+                  },
+                  axisLabel: {
+                    fontsize: 13
+                  }
+                }}
+              />
+
+              <VictoryLine
+                style={{
+                  // data: {stroke: '#c43a31'},
+                  data: {stroke: 'limegreen'},
+
+                  parent: {border: '0.5px solid #ccc'}
+                }}
+                data={this.state.weightMonth}
+              />
+            </VictoryChart>
+          </div>
+
+          <div id="weightVsDay">
+            <h3>Calories consumed vs day (Month)</h3>
+            <VictoryChart
+              style={{parent: {maxWidth: '100%', maxHeight: '100%'}}}
+            >
+              <VictoryAxis
+                tickValues={tickValues}
+                tickFormat={tickFormat}
+                style={{
+                  tickLabels: {
+                    fontSize: '10px',
+                    fontFamily: 'gothicApple',
+                    fillOpacity: 1,
+                    marginTop: '4px',
+                    padding: 3,
+                    angle: 90
+                  },
+                  axisLabel: {
+                    fontsize: 13
+                  }
+                }}
+              />
+              <VictoryAxis
+                dependentAxis
+                domain={[1500, 3000]}
+                style={{
+                  tickLabels: {
+                    fontSize: '15px',
+                    fontFamily: 'gothicApple',
+                    fillOpacity: 1,
+                    margin: 1,
+                    padding: 2,
+                    angle: 0
+                  },
+                  axisLabel: {
+                    fontsize: 13
+                  }
+                }}
+              />
+              <VictoryLine
+                style={{
+                  data: {stroke: 'limegreen'},
+                  parent: {border: '0.5px solid #ccc'}
+                }}
+                data={this.state.calsMonth}
+              />
+            </VictoryChart>
+          </div>
+
+          <div id="weightVsDay">
+            <h3>Calories burned vs day (Month)</h3>
+            <VictoryChart
+              style={{parent: {maxWidth: '100%', maxHeight: '100%'}}}
+            >
+              <VictoryAxis
+                tickValues={tickValues}
+                tickFormat={tickFormat}
+                style={{
+                  tickLabels: {
+                    fontSize: '10px',
+                    fontFamily: 'gothicApple',
+                    fillOpacity: 1,
+                    marginTop: '4px',
+                    padding: 3,
+                    angle: 90
+                  },
+                  axisLabel: {
+                    fontsize: 13
+                  }
+                }}
+              />
+              <VictoryAxis
+                dependentAxis
+                domain={[0, 1000]}
+                style={{
+                  tickLabels: {
+                    fontSize: '15px',
+                    fontFamily: 'gothicApple',
+                    fillOpacity: 1,
+                    margin: 1,
+                    padding: 2,
+                    angle: 0
+                  },
+                  axisLabel: {
+                    fontsize: 13
+                  }
+                }}
+              />
+              <VictoryLine
+                style={{
+                  data: {stroke: 'crimson'},
+                  parent: {border: '0.5px solid #ccc'}
+                }}
+                data={this.state.burnedMonth}
+              />
+            </VictoryChart>
+          </div>
+        </div>
+
+        <div id="otherStats">
+          <div id="weightProgressBar">
+            <h6>Starting weight: {this.props.goal.startingWeight}</h6>
+            <Progress
+              percent={per}
+              indicating
+              progress
+              color="green"
+              label={`${this.props.goal.currentWeight} lbs`}
+              style={{minWidth: '75%', maxHeight: '24.5px'}}
+            />
+            <h6>Goal weight: {this.props.goal.goalWeight}</h6>
+          </div>
+
+          <div>
+            <h4>
+              Daily calories needed to reach weeky goal:{' '}
+              {this.props.goal.dailyCalories}
+            </h4>
+            <h4>Start Date: {startDate}</h4>
+            <h4>Weeks left: {weeksLeft}</h4>
+            <h4>End Date: {endDate}</h4>
+          </div>
+        </div>
       </div>
     )
   }
 }
 
-const tickStyle = {
-  // axis: {
-  //   stroke: 'black',
-  //   strokeOpacity: 0
-  // },
-  // ticks: {
-  //   size: 2,
-  //   stroke: 'black',
-  //   strokeOpacity: 0.1
-  // },
-  // grid: {
-  //   stroke: 'rgba(0, 0, 0, 0.1)',
-  //   strokeWidth: 1,
-  //   strokeDasharray: '6, 6',
-  // },
-  tickLabels: {
-    fontSize: '3px',
-    fontFamily: 'inherit',
-    fillOpacity: 1,
-    margin: 0,
-    padding: 0
-  },
-  axisLabel: {
-    fontsize: 13
-  }
-}
-
 const mapStateToProps = state => {
   return {
-    foods: state.food,
+    food: state.food,
     user: state.user,
-    checkIns: state.checkIns
+    checkIns: state.checkIns,
+    goal: state.goal
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    // getFood: () => dispatch(getFood())
+    getGoal: () => dispatch(getGoal()),
+    getFood: () => dispatch(getFood())
   }
 }
 

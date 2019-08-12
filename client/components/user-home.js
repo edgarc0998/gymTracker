@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import TrackFood from './trackFood'
-import {TrackProgress} from './trackProgress.js'
+import TrackProgress from './trackProgress.js'
 import {TrackWorkoutCard} from './CurrentWorkout'
 import Food from './food'
 import {withRouter, Route, Switch} from 'react-router-dom'
@@ -10,7 +10,7 @@ import Profile from './profile'
 import {getGoal} from '../store/userGoals'
 import {Button, Card, Image} from 'semantic-ui-react'
 import Circle from 'react-circle'
-import {FoodSearch} from './foodSearch'
+import FoodSearch from './foodSearch'
 import Progress from './progress'
 
 /**
@@ -35,7 +35,7 @@ export class UserHome extends React.Component {
         <div className="userComponents">
           <Card.Group>
             <Route exact path="/home" component={TrackFood} />
-            <Route exact path="/home" component={TrackWorkoutCard} />
+            {/* <Route exact path="/home" component={TrackWorkoutCard} /> */}
             <Route exact path="/home" component={TrackProgress} />
           </Card.Group>
         </div>

@@ -12,8 +12,8 @@ import {getAllCheckIns} from './store/checkIn'
  * COMPONENT
  */
 class Routes extends Component {
-  componentDidMount() {
-    this.props.loadInitialData()
+  async componentDidMount() {
+    await this.props.loadInitialData()
     // console.log('here',this.props)
   }
 
@@ -61,6 +61,7 @@ const mapDispatch = dispatch => {
       dispatch(me())
       dispatch(getFood())
       dispatch(getAllCheckIns())
+      dispatch(getGoal())
     }
   }
 }

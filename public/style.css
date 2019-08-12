@@ -257,13 +257,46 @@ form div {
 
 .profile {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#profileGoals {
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+#calorieNeeds {
+  display: flex;
+  flex-direction: column;
+}
+
+#macroPicker {
+  display: flex;
+  flex-direction: column;
+}
+
+#percentSelectors {
+  display: flex;
+  flex-direction: row;
+}
+
 #save-changes {
-  background-color: crimson;
+  /* background-color: crimson;
+  color: white; */
+  background-color: limegreen;
   color: white;
+  max-width: 150px;
+}
+
+#save-changesMacros {
+  /* background-color: crimson;
+  color: white; */
+  background-color: limegreen;
+  color: white;
+  max-width: 150px;
 }
 
 #addFoodButton {
@@ -336,6 +369,53 @@ form div {
   padding: 5px;
   font-size: 14px;
   margin-left: 1rem;
+}
+
+#progressDiv {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+}
+
+#charts {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  height: 100%;
+  width: 60%;
+}
+
+#weightVsDay {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+  width: 75%;
+  height: 30%;
+}
+
+#otherStats {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+#weightProgressBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+#macroPicker {
+  display: flex;
+  flex-direction: row;
+}
+
+.ui.indicating.progress[data-percent^='5'] .bar {
+  background-color: limegreen;
 }
 
 .react-datepicker-popper[data-placement^='bottom'] .react-datepicker__triangle,

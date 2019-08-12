@@ -2,11 +2,11 @@ const router = require('express').Router()
 const UserGoals = require('../db/models/userGoals')
 module.exports = router
 
-router.get('/:id', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const goals = await UserGoals.findOne({
       where: {
-        userId: req.params.id
+        userId: req.user.id
       }
     })
     res.json(goals)
@@ -19,7 +19,7 @@ router.put('/', async (req, res, next) => {
   try {
     const goal = await UserGoals.findOne({
       where: {
-        userId: req.body.userId
+        userId: req.user.id
       }
     })
 

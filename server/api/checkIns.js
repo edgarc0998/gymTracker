@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {DailyCheckIn} = require('../db/models')
+const {DailyCheckIn, UserGoals} = require('../db/models')
 var Sequelize = require('sequelize')
 const Op = Sequelize.Op
 
@@ -61,11 +61,26 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-// router.post('/', async (req, res, next) => {
-//   try {
-//     const food = await Food.create(req.body)
-//     res.json(food)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
+router.put('/', async (req, res, next) => {
+  try {
+    var checkIn = await DailyCheckIn.findOne({
+      where: {
+        createdAt: req.body.createdAt
+      }
+    })
+
+    var userGoal = await UserGoals.findOne({
+      where: {
+        userId: req.user.id
+      }
+    })
+
+    await userGoal.update({
+      currentWeight: req.body.weight
+    })
+
+    await checkIn.update(req.body)
+  } catch (err) {
+    next(err)
+  }
+})

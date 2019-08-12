@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom'
 import {Table} from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import Emoji from 'a11y-react-emoji'
+import {VictoryPie} from 'victory'
 
 const Totals = props => {
   return (
@@ -57,7 +58,12 @@ const FoodTime = props => {
   var totalProtein = 0
 
   foods.map(food => {
-    if (food.time === props.time) {
+    if (food.time === props.time && !props.totals) {
+      totalCarbs += food.carbs
+      totalFat += food.fat
+      totalProtein += food.protein
+      totalCalories += food.calories
+    } else if (props.totals && props.time === 'all') {
       totalCarbs += food.carbs
       totalFat += food.fat
       totalProtein += food.protein
@@ -112,7 +118,7 @@ const FoodTime = props => {
                 to={`/home/food/add/${props.time}`}
               >
                 {' '}
-                <h3>Add food + </h3>
+                {props.totals ? null : <h3>Add food + </h3>}
               </Link>
             </Table.Cell>
           </Table.Row>
@@ -170,23 +176,30 @@ class Food extends React.Component {
     }
 
     var totalCalories = 0
+    var bfast = 0
+    var lunch = 0
+    var dinner = 0
+    var snacks = 0
+
     var totalFat = 0
     var totalCarbs = 0
     var totalProtein = 0
 
     foods.forEach(food => {
-      totalCalories += food.calories
+      if (food.time === 'breakfast') {
+        bfast += food.calories
+      } else if (food.time === 'lunch') {
+        lunch += food.calories
+      } else if (food.time === 'dinner') {
+        dinner += food.calories
+      } else if (food.time === 'snacks') {
+        snacks += food.calories
+      }
+      // totalCalories += food.calories
       totalFat += food.fat
       totalProtein += food.protein
       totalCarbs += food.carbs
     })
-
-    var totals = {
-      totalCalories,
-      totalFat,
-      totalProtein,
-      totalCarbs
-    }
 
     return (
       <React.Fragment>
@@ -212,13 +225,90 @@ class Food extends React.Component {
           <FoodTime time="lunch" foods={foods} />
           <FoodTime time="dinner" foods={foods} />
           <FoodTime time="snacks" foods={foods} />
-          {/* <FoodTime time="all" foods={foods} /> */}
+          <FoodTime time="all" foods={foods} totals={true} />
+        </div>
 
-          <Totals
-            totals={totals}
-            handleCHange={this.handleChange}
-            value={this.state.calsBurned}
-          />
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          <div
+            style={{
+              width: '50%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <h4>Macro breakdown</h4>
+            <VictoryPie
+              colorScale={['crimson', 'limegreen', 'navy']}
+              data={[
+                {
+                  x: `Fat: ${totalFat}g`,
+                  y: totalFat
+                },
+                {
+                  x: `Carbs: ${totalCarbs}g`,
+                  y: totalCarbs
+                },
+                {
+                  x: `Protein: ${totalProtein}g`,
+                  y: totalProtein
+                }
+              ]}
+              labelRadius={87}
+              style={{
+                labels: {
+                  fill: 'white',
+                  fontSize: 14,
+                  padding: '5px',
+                  margin: '5px'
+                }
+              }}
+            />
+          </div>
+          <div
+            style={{
+              width: '50%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <h4>Calorie breakdown</h4>
+            <VictoryPie
+              colorScale={['crimson', 'limegreen', 'navy', 'orange']}
+              data={[
+                {
+                  x: `Breakfast: ${bfast}`,
+                  y: bfast
+                },
+                {
+                  x: `Lunch: ${lunch}`,
+                  y: lunch
+                },
+                {
+                  x: `Dinner: ${dinner}`,
+                  y: dinner
+                },
+                {
+                  x: `Snacks: ${snacks}`,
+                  y: snacks
+                }
+              ]}
+              labelRadius={87}
+              style={{
+                labels: {
+                  fill: 'white',
+                  fontSize: 14,
+                  padding: '5px',
+                  margin: '5px'
+                }
+              }}
+            />
+          </div>
         </div>
       </React.Fragment>
     )

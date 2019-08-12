@@ -31,10 +31,10 @@ export const updateGoal = goal => {
   }
 }
 
-export const getGoal = user => {
+export const getGoal = () => {
   return async dispatch => {
     try {
-      const goal = await axios.get(`/api/goals/${user}`)
+      const goal = await axios.get(`/api/goals`)
       dispatch(getGoalAction(goal.data))
     } catch (err) {
       console.error(err)

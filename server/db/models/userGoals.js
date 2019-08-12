@@ -31,8 +31,19 @@ const UserGoals = db.define('userGoals', {
     defaultValue: 0
   },
   goal: {
-    type: Sequelize.ENUM('Build muscle', 'Burn fat', 'Maintain weight'),
-    defaultValue: 'Maintain weight'
+    type: Sequelize.STRING
+  },
+  activityLevel: {
+    type: Sequelize.FLOAT
+  },
+  height: {
+    type: Sequelize.INTEGER
+  },
+  age: {
+    type: Sequelize.INTEGER
+  },
+  startDate: {
+    type: Sequelize.STRING
   }
 })
 
