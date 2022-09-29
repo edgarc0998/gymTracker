@@ -72,7 +72,7 @@
     "semantic-ui-react": "^0.87.3",
     "sequelize": "^5.10.3",
     "socket.io": "^2.2.0",
-    "victory": "^32.3.5"
+    "victory": "^36.6.8"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
